@@ -23,7 +23,13 @@ object LangManager : Reloader {
         }
     }
 
-    fun translatable(key: String, lang: String = ConfigManager.value(Config.LANG)) = cache[lang.lowercase()]?.get(key)?.jsonPrimitive?.contentOrNull ?: key
+    fun translatable(key: String, lang: String = ConfigManager.value(Config.LANG)): String {
+        val current = cache[lang.lowercase()]?.get(key)?.jsonPrimitive?.contentOrNull
+        if (current != null) return current
+        return cache["zh_cn"]?.get(key)?.jsonPrimitive?.contentOrNull
+            ?: cache["en_us"]?.get(key)?.jsonPrimitive?.contentOrNull
+            ?: key
+    }
 
     fun sendMessage(sender: CommandSender?, key: String, lang: String = ConfigManager.value(Config.LANG), args: List<String> = emptyList()) {
         val message = translatable(key, lang).format(*args.toTypedArray())

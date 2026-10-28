@@ -1,9 +1,21 @@
 {
-  "config.reload": "Reloads the configuration",
+  "config.reload": "Configuration and language files reloaded",
   "script.loaded": "Script loading complete",
   "script.format": "- %s",
   "script.wait": "Loading scripts. Please wait a moment.",
   "script.unloaded": "Script unloaded",
   "script.list": "Script list",
-  "script.not_found": "Script '%s' not found"
+  "script.not_found": "Script '%s' not found",
+  "script.load_failed": "Failed to load script: %s — %s",
+  "command.help.title": "<gold>========== <yellow>EternalScript Commands</yellow> ==========</gold>",
+  "command.help.help": "<click:suggest_command:'/es help'><gold>/es help</gold></click> <gray>-</gray> <white>View command help</white>",
+  "command.help.compile": "<click:suggest_command:'/es compile'><gold>/es compile</gold></click> <gray>-</gray> <white>Compile and load all scripts in configured folders</white>",
+  "command.help.clear": "<click:suggest_command:'/es clear'><gold>/es clear</gold></click> <gray>-</gray> <white>Unload all currently loaded scripts</white>",
+  "command.help.config": "<click:suggest_command:'/es config'><gold>/es config</gold></click> <gray>-</gray> <white>Reload configuration and language files</white>",
+  "command.help.call": "<click:suggest_command:'/es call '><gold>/es call <script> <function> [args...]</gold></click> <gray>-</gray> <white>Call a function in a script (strings/numbers/booleans)</white>",
+  "command.help.load": "<click:suggest_command:'/es load '><gold>/es load <path></gold></click> <gray>-</gray> <white>Load a specific script file (e.g. /es load \"EternalScript-Cyu/scripts/hello.kt\")</white>",
+  "command.help.unload": "<click:suggest_command:'/es unload '><gold>/es unload <script></gold></click> <gray>-</gray> <white>Unload a specific script file (e.g. /es unload \"hello.kt\")</white>",
+  "command.help.list": "<click:suggest_command:'/es list'><gold>/es list</gold></click> <gray>-</gray> <white>List all currently loaded scripts</white>",
+  "command.help.find": "<click:suggest_command:'/es find '><gold>/es find <keyword></gold></click> <gray>-</gray> <white>Search whitelisted import cache</white>",
+  "command.help.footer": "<gold>==============================================</gold>"
 }

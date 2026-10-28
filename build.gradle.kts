@@ -1,19 +1,19 @@
 plugins {
     `java-library`
     // https://kotlinlang.org/docs/releases.html
-    kotlin("jvm")
+    id("org.jetbrains.kotlin.jvm")
     // https://github.com/Kotlin/kotlinx.serialization
-    kotlin("plugin.serialization")
+    id("org.jetbrains.kotlin.plugin.serialization")
     // https://plugins.gradle.org/plugin/io.papermc.paperweight.userdev
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.19"
+    id("io.papermc.paperweight.userdev")
     // https://github.com/jpenilla/run-task
-    id("xyz.jpenilla.run-paper") version "3.0.2"
+    id("xyz.jpenilla.run-paper")
     // https://github.com/jpenilla/resource-factory
-    id("xyz.jpenilla.resource-factory-paper-convention") version "1.3.1"
+    id("xyz.jpenilla.resource-factory-paper-convention")
 }
 
 group = "eternalScript"
-val pluginVersion = "1.0.8"
+val pluginVersion = "1.0.0"
 val javaVersion = 21
 val pluginApiVersion = "1.21.8"
 val minecraftVersion = "1.21.11"
@@ -93,20 +93,25 @@ tasks {
         options.release = javaVersion
     }
     jar {
+        archiveBaseName.set("EternalScript-Cyu")
         version = pluginVersion()
     }
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
+    sourceCompatibility = JavaVersion.toVersion(javaVersion)
+    targetCompatibility = JavaVersion.toVersion(javaVersion)
 }
 
 kotlin {
-    jvmToolchain(javaVersion)
+    jvmToolchain(25)
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
 }
 
 paperPluginYaml {
-    name = rootProject.name
+    name = "EternalScript-Cyu"
     main = pluginMain()
     version = pluginVersion()
     apiVersion = pluginApiVersion
@@ -114,6 +119,6 @@ paperPluginYaml {
     foliaSupported = true
 }
 
-fun pluginMain() = "$group.${rootProject.name}"
+fun pluginMain() = "$group.EternalScript"
 
 fun pluginVersion() = pluginVersion.let { it.ifEmpty { "1.0.0" } }

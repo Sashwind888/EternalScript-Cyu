@@ -24,7 +24,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
 object Root {
-    const val ORIGIN = "EternalScript"
+    const val ORIGIN = "EternalScript-Cyu"
 
     val INSTANCE = pluginManager().getPlugin(ORIGIN) as EternalScript
 

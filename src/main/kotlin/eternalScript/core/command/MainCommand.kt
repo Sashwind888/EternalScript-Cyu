@@ -5,8 +5,10 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import eternalScript.api.command.CommandBuilder
 import eternalScript.core.data.Resource
+import eternalScript.core.extension.toComponent
 import eternalScript.core.extension.wrap
 import eternalScript.core.manager.DataManager
+import eternalScript.core.manager.LangManager
 import eternalScript.core.manager.ReloadManager
 import eternalScript.core.manager.ScriptManager
 import eternalScript.core.the.Root
@@ -15,6 +17,10 @@ import io.papermc.paper.command.brigadier.CommandSourceStack
 object MainCommand : CommandBuilder() {
     override val builder = builder("eternalscript") {
         requires(::isOp)
+        executes(::help)
+        then(builder("help") {
+            executes(::help)
+        })
         then(builder("compile") {
             executes(::compile)
         })
@@ -44,7 +50,10 @@ object MainCommand : CommandBuilder() {
                         }
                         builder.buildFuture()
                     }
-                    executes(::call)
+                    then(builder("args", StringArgumentType.greedyString()) {
+                        executes(::call)
+                    })
+                    executes(::callNoArgs)
                 })
             })
         })
@@ -77,8 +86,37 @@ object MainCommand : CommandBuilder() {
         then(builder("list") {
             executes(::list)
         })
+        then(builder("find") {
+            then(builder("keyword", StringArgumentType.string()) {
+                executes(::find)
+            })
+        })
     }
     override val aliases = listOf("es")
+
+    fun help(context: CommandContext<CommandSourceStack>): Int {
+        val sender = context.source.sender
+        val helpKeys = listOf(
+            "command.help.title",
+            "command.help.help",
+            "command.help.compile",
+            "command.help.clear",
+            "command.help.config",
+            "command.help.call",
+            "command.help.load",
+            "command.help.unload",
+            "command.help.list",
+            "command.help.find",
+            "command.help.footer"
+        )
+        helpKeys.forEach { key ->
+            val text = LangManager.translatable(key)
+            if (text != key && text.isNotBlank()) {
+                sender.sendMessage(text.toComponent())
+            }
+        }
+        return Command.SINGLE_SUCCESS
+    }
 
     fun compile(context: CommandContext<CommandSourceStack>): Int {
         val sender = context.source.sender
@@ -101,7 +139,32 @@ object MainCommand : CommandBuilder() {
     fun call(context: CommandContext<CommandSourceStack>): Int {
         val script = StringArgumentType.getString(context, "script")
         val function = StringArgumentType.getString(context, "function")
-        ScriptManager.call(script, function)
+        val argsString = StringArgumentType.getString(context, "args")
+        val sender = context.source.sender
+        val args: List<Any?> = argsString.split(" ").map { arg ->
+            arg.toIntOrNull() ?: arg.toDoubleOrNull()
+                ?: arg.takeIf { it.equals("true", true) || it.equals("false", true) }
+                    ?.lowercase() ?: arg
+        }
+        Root.launch {
+            val result = ScriptManager.call(script, function, *args.toTypedArray())
+            if (result != null) {
+                sender.sendMessage("Result: $result")
+            }
+        }
+        return Command.SINGLE_SUCCESS
+    }
+
+    fun callNoArgs(context: CommandContext<CommandSourceStack>): Int {
+        val script = StringArgumentType.getString(context, "script")
+        val function = StringArgumentType.getString(context, "function")
+        val sender = context.source.sender
+        Root.launch {
+            val result = ScriptManager.call(script, function)
+            if (result != null) {
+                sender.sendMessage("Result: $result")
+            }
+        }
         return Command.SINGLE_SUCCESS
     }
 
@@ -126,6 +189,16 @@ object MainCommand : CommandBuilder() {
     fun list(context: CommandContext<CommandSourceStack>): Int {
         val sender = context.source.sender
         ScriptManager.scriptList(sender)
+        return Command.SINGLE_SUCCESS
+    }
+
+    fun find(context: CommandContext<CommandSourceStack>): Int {
+        val sender = context.source.sender
+        val keyword = StringArgumentType.getString(context, "keyword")
+        val imports = eternalScript.core.script.definition.debugImportsCache
+        val matches = imports.filter { it.contains(keyword, ignoreCase = true) }
+        sender.sendMessage("§e搜索 '$keyword'，找到 ${matches.size} 个:")
+        matches.take(50).forEach { sender.sendMessage("  §7$it") }
         return Command.SINGLE_SUCCESS
     }
 }

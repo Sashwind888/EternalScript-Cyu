@@ -1,0 +1,21 @@
+{
+  "config.reload": "配置与语言文件已重新加载",
+  "script.loaded": "脚本加载完成",
+  "script.format": "- %s",
+  "script.wait": "正在加载脚本，请稍候。",
+  "script.unloaded": "脚本已卸载",
+  "script.list": "脚本列表",
+  "script.not_found": "未找到脚本 '%s'",
+  "script.load_failed": "脚本加载失败: %s — %s",
+  "command.help.title": "<gold>========== <yellow>EternalScript 命令帮助</yellow> ==========</gold>",
+  "command.help.help": "<click:suggest_command:'/es help'><gold>/es help</gold></click> <gray>-</gray> <white>查看插件命令帮助</white>",
+  "command.help.compile": "<click:suggest_command:'/es compile'><gold>/es compile</gold></click> <gray>-</gray> <white>编译并加载配置目录中的所有脚本</white>",
+  "command.help.clear": "<click:suggest_command:'/es clear'><gold>/es clear</gold></click> <gray>-</gray> <white>卸载当前已加载的所有脚本</white>",
+  "command.help.config": "<click:suggest_command:'/es config'><gold>/es config</gold></click> <gray>-</gray> <white>重新加载插件配置与语言文件</white>",
+  "command.help.call": "<click:suggest_command:'/es call '><gold>/es call <脚本> <函数> [参数...]</gold></click> <gray>-</gray> <white>调用指定脚本中的函数 (支持文本/数字/布尔值)</white>",
+  "command.help.load": "<click:suggest_command:'/es load '><gold>/es load <路径></gold></click> <gray>-</gray> <white>加载特定的脚本文件 (例如: /es load \"EternalScript-Cyu/scripts/hello.kt\")</white>",
+  "command.help.unload": "<click:suggest_command:'/es unload '><gold>/es unload <脚本></gold></click> <gray>-</gray> <white>卸载特定的脚本文件 (例如: /es unload \"hello.kt\")</white>",
+  "command.help.list": "<click:suggest_command:'/es list'><gold>/es list</gold></click> <gray>-</gray> <white>列出当前所有已加载的脚本</white>",
+  "command.help.find": "<click:suggest_command:'/es find '><gold>/es find <关键词></gold></click> <gray>-</gray> <white>搜索已导入的类白名单缓存</white>",
+  "command.help.footer": "<gold>==============================================</gold>"
+}

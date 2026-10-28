@@ -2,6 +2,6 @@
 /.idea/
 /.kotlin/
 /gradlew
-/gradlew.bat
 /build/
 /run/
+.git.zip

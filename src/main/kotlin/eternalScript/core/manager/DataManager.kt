@@ -51,19 +51,20 @@ object DataManager : Manager {
     }
 
     fun saveResource(resource: Resource, vararg extension: String) {
-        if (!resource.exists()) {
-            val jarPath = javaClass.protectionDomain.codeSource.location.path
-            val fileName = resource.file.nameWithoutExtension
-            ZipFile(jarPath).use { jar ->
-                jar.entries()
-                    .asSequence()
-                    .map(ZipEntry::getName)
-                    .filter { name ->
-                        name.startsWith(fileName) && extension.any(name::endsWith)
-                    }.forEach { name ->
+        val jarPath = javaClass.protectionDomain.codeSource.location.path
+        val fileName = resource.file.nameWithoutExtension
+        ZipFile(jarPath).use { jar ->
+            jar.entries()
+                .asSequence()
+                .map(ZipEntry::getName)
+                .filter { name ->
+                    name.startsWith(fileName) && extension.any(name::endsWith)
+                }.forEach { name ->
+                    val target = Root.dataFolder().resolve(name)
+                    if (!target.exists()) {
                         Root.INSTANCE.saveResource(name, false)
                     }
-            }
+                }
         }
     }
 

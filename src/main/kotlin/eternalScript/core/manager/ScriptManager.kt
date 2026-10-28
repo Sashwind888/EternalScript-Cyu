@@ -52,7 +52,16 @@ object ScriptManager : Manager {
             }
         }
 
-        val scriptInstance = result.valueOrNull()?.returnValue?.scriptInstance as? Script ?: return
+        val value = result.valueOrNull()
+        val rv = value?.returnValue
+        val si = rv?.scriptInstance
+        Root.componentLogger().info("[诊断] ${scriptFile.name}: value=${value != null}, rv=${rv != null}, si=${si != null}, siType=${si?.javaClass?.name}")
+
+        val scriptInstance = si as? Script
+        if (scriptInstance == null) {
+            Root.componentLogger().warn("[诊断] scriptInstance 为 null 或不是 Script 类型: ${scriptFile.name}")
+            return
+        }
         val scriptData = ScriptData(scriptInstance)
 
         remove(unwrap, silent = true)
@@ -111,7 +120,7 @@ object ScriptManager : Manager {
 
     fun script(script: String) = cache[script]
 
-    fun functions(script: String) = cache[script]?.scriptParser?.functionCache?.filterValues { it.parameters.size == 1 }?.keys ?: emptyList()
+    fun functions(script: String) = cache[script]?.scriptParser?.functionCache?.keys ?: emptyList()
 
     fun call(script: String, function: String, vararg args: Any?) = script(script.unwrap())?.let { data ->
         data.scriptParser.call(data.script, function.unwrap(), *args)

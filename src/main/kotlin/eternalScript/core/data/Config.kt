@@ -21,6 +21,6 @@ enum class Config(
         )
     ),
     METRICS("metrics", true),
-    LANG("lang", "en_US")
+    LANG("lang", "zh_CN")
     ;
 }
